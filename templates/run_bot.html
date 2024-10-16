@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% load i18n django_bootstrap5 %}
+{% block content %}
+  <div class="container wrapper flex-grow-1">
+
+    <h1 class="my-4"></h1>
+
+{#    <div class="d-flex justify-content-center align-items-center"#}
+{#         style="width: 100%;">#}
+{#      <div class="container mx-auto">#}
+        <form action="{% url 'run_bot' %}" method="post">
+
+          {% csrf_token %}
+          {% bootstrap_button "Запустить бота" button_type="submit"%}
+        </form>
+      </div>
+{#    </div>#}
+{#  </div>#}
+{% endblock %}

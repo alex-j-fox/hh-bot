@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% load i18n django_bootstrap5 %}
+
+{% block content %}
+
+  <h1 class="my-4">Вход</h1>
+  <form action="{% url 'login' %}" method="post">
+    {% csrf_token %}
+    {% bootstrap_form form %}
+    {% bootstrap_button "Войти" button_type="submit" %}
+  
+  </form>
+
+{% endblock %}

@@ -1,0 +1,36 @@
+<!doctype html>
+
+{% load django_bootstrap5 %}
+{% load i18n %}
+{% get_current_language as LANGUAGE_CODE %}
+
+
+<html lang="{{ LANGUAGE_CODE|default:'en-us' }}">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <meta name="description" content="{% trans "Task manager Hexlet" %}">
+  <title>{% block title %}Автоподнятие резюме HH{% endblock %}</title>
+  {% bootstrap_css %}
+  {% bootstrap_javascript %}
+</head>
+
+<body class="d-flex flex-column min-vh-100">
+
+{% include "includes/navbar.html" %}
+
+<div class="container wrapper flex-grow-1">
+
+  {% bootstrap_messages %}
+
+  {% block content %}
+  {% endblock %}
+
+</div>
+
+{% include "includes/footer.html" %}
+
+</body>
+</html>

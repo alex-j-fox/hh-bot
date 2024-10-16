@@ -1,0 +1,37 @@
+{% load i18n %}
+
+<nav class="navbar navbar-expand-lg navbar-light bg-light mx-md-3"
+     aria-label="Navigation bar">
+  <div class="container">
+    <a class="navbar-brand" href="/">HH bot️</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+            data-bs-target="#navbarToggleExternalContent">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarToggleExternalContent">
+
+      {% for item in navbar_items %}
+        <div class="navbar-nav {{ item.align }}">
+          {% if item.form %}
+            <form action="{{ item.url }}" method="post">
+              {% csrf_token %}
+              <input class="btn nav-link" type="submit" value="{{ item.label }}">
+            </form>
+
+          {% else %}
+
+            <div class="nav-item">
+              {% if item.url %}
+                <a class="{{ item.class }}" href="{{ item.url }}">{{ item.label }}</a>
+              {% else %}
+                <span class="{{ item.class }}">{{ item.label }}</span>
+              {% endif %}
+            </div>
+
+          {% endif %}
+        </div>
+      {% endfor %}
+
+    </div>
+  </div>
+</nav>
