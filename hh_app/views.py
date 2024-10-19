@@ -24,7 +24,7 @@ class LogoutUserView(LogoutView):
         Выход пользователя из системы.
 
         Выполняет выход пользователя из системы.
-        Выводит сообщение об успешном выходе и перенаправляет на главную страницу.
+        Выводит сообщение об успешном выходе и перенаправляет на главную.
         """
         logout(request)
         messages.info(request, 'Вы вышли из системы')
@@ -39,7 +39,7 @@ class RunBotView(TemplateView):
         Выход пользователя из системы.
 
         Выполняет выход пользователя из системы.
-        Выводит сообщение об успешном выходе и перенаправляет на главную страницу.
+        Выводит сообщение об успешном выходе и перенаправляет на главную.
         """
         if request.user.is_authenticated:
             subprocess.Popen(['python', 'bot.py'])
@@ -47,6 +47,7 @@ class RunBotView(TemplateView):
             return redirect('index')
         messages.info(request, 'Вы не вошли в систему')
         return redirect('login')
+
 
 def handler404(request, exception):
     return render(request, 'errors/404.html', status=404)

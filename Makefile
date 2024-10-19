@@ -5,6 +5,7 @@ MANAGE := poetry run python manage.py
 install:
 	poetry install --no-root
 
+
 migrate:
 	$(MANAGE) migrate
 
@@ -14,7 +15,7 @@ convert:
 build: install convert migrate
 
 dev:
-	$(MANAGE) runserver localhost:8030
+	$(MANAGE) runserver localhost:8050
 
 create_superuser:
 	$(MANAGE) createsuperuser
@@ -27,6 +28,6 @@ selfcheck:
 	poetry check
 
 lint:
-	poetry run flake8 task_manager --exclude=*migrations/
+	poetry run flake8 hh_app --exclude=*migrations/
 
 check: selfcheck lint

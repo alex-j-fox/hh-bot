@@ -1,4 +1,6 @@
 # hh-ru-auto-resume-raising
+forked from https://github.com/sergo-code/hh-ru-auto-resume-raising
+
 ### Описание
 Программа для автоматического подъема резюме на [HeadHunter](https://hh.ru/) 
 каждые 4 часа. Альтернатива платной услуге 
