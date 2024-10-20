@@ -2,9 +2,9 @@ from aiogram import types, Dispatcher
 from aiogram.dispatcher import FSMContext
 from aiogram.dispatcher.filters.state import State, StatesGroup
 
+from keyboards.keyboard import TextButtonList
 from services import is_admin
 from services.connecting import obj
-from keyboards.keyboard import TextButtonList
 
 
 class AddResume(StatesGroup):
@@ -29,7 +29,8 @@ async def set_resume(message: types.Message, state=FSMContext) -> None:
     if data['title'] in obj.resume_src.keys():
         await AddResume.next()
         text = 'Введите время поднятия, например 14:00 будет соответствовать ' \
-               '2:00 6:00 10:00 <code>14:00</code> 18:00 22:00'
+               '<code>2:00</code> <code>6:00</code> <code>10:00</code> '\
+               '<code>14:00</code> <code>18:00</code> <code>22:00</code>'
         await message.answer(text, parse_mode='html')
     else:
         text = 'Резюме с таким наименованием не найдено.'
@@ -46,7 +47,8 @@ async def set_time(message: types.Message, state=FSMContext) -> None:
         minute = lenght[1]
         if hour.isnumeric() and minute.isnumeric() and len(lenght) == 2:
             if (0 <= int(hour) < 24) and (0 <= int(minute) < 60):
-                await obj.add_resume_active(data['title'], int(hour), int(minute))
+                await obj.add_resume_active(data['title'], int(hour),
+                                            int(minute))
                 text = f'<b>Добавлено новое расписание</b>' \
                        f"\n{data['title']}" \
                        f"\n{data['time']}"
@@ -62,6 +64,7 @@ async def set_time(message: types.Message, state=FSMContext) -> None:
 
 
 def register_handler_add_to_schedule(dp: Dispatcher):
-    dp.register_message_handler(add_resume, text=[TextButtonList['add_resume']])
+    dp.register_message_handler(add_resume,
+                                text=[TextButtonList['add_resume']])
     dp.register_message_handler(set_resume, state=AddResume.title)
     dp.register_message_handler(set_time, state=AddResume.time)
