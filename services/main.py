@@ -38,12 +38,18 @@ class HHru:
                     return response
 
     async def _get_cookie_anonymous(self) -> None:
+        print(f'-------  {datetime.datetime.now()}  -------\n'
+              f'Получение анонимного файла cookie')
         url = 'https://hh.ru/'
         headers = {'user-agent': self.user_agent}
+        print(f'Получение ответа от {url}')
         response = await self.request('head', url, headers=headers)
         cookie = str(response.headers)
+        print(f'Получен ответ с файлом cookie: {cookie}')
         self.xsrf = re.search(r"(?<=_xsrf=).+?;", cookie).group()[:-1]
+        print(f'xsrf: {self.xsrf}')
         self.hhtoken = re.search(r"(?<=hhtoken=).+?;", cookie).group()[:-1]
+        print(f'hhtoken: {self.hhtoken}')
 
     async def _get_request_data(self, resume: str = None):
         headers = {
