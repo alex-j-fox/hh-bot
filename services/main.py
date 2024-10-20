@@ -8,6 +8,10 @@ import json
 import re
 from bs4 import BeautifulSoup
 from fake_useragent import UserAgent
+import logging
+
+logging.basicConfig(level=logging.DEBUG)
+logger = logging.getLogger(__name__)
 
 
 class HHru:
@@ -38,12 +42,19 @@ class HHru:
                     return response
 
     async def _get_cookie_anonymous(self) -> None:
+        print(f'-------  {datetime.datetime.now()}  -------\n'
+              f'Получение анонимного файла cookie')
         url = 'https://hh.ru/'
         headers = {'user-agent': self.user_agent}
+        print(f'Получение ответа от {url}')
         response = await self.request('head', url, headers=headers)
         cookie = str(response.headers)
+        logger.debug("--- СОДЕРЖИМОЕ COOKIE --- !!!: %s", cookie)
+        print(f'Получен ответ с файлом cookie: {cookie}')
         self.xsrf = re.search(r"(?<=_xsrf=).+?;", cookie).group()[:-1]
+        print(f'xsrf: {self.xsrf}')
         self.hhtoken = re.search(r"(?<=hhtoken=).+?;", cookie).group()[:-1]
+        print(f'hhtoken: {self.hhtoken}')
 
     async def _get_request_data(self, resume: str = None):
         headers = {
@@ -124,12 +135,14 @@ class HHru:
             print('Статус ответа: OK')
             soup = BeautifulSoup(await response.text(), 'lxml')
             resumes = soup.select('div[data-qa="resume"]')
-            # print(f'Resumes !!!!! :{resumes}')
+            print(f'Resumes !!!!! :{resumes}')
             self.resume_src = dict()
             for resume in resumes:
                 title = resume.get("data-qa-title")
                 # link = resume.select_one("a[data-qa='resume-title-link']").get("href")
-                link = resume.select_one("a[data-sentry-element='Card']").get("href")
+                link = resume.select_one("a[data-sentry-element='Card']").get("href") 
+                # link = resume.select_one("a[data-sentry-element='Link']").get("href")
+                # link = resume.select_one("a[data-sentry-source-file='Resume.jsx']").get("href")
                 print(f'Резюме "{title}" получено. Ссылка: {link}')
                 link = link.split("/")[-1].split("?")[0]
                 self.resume_src[title] = link
@@ -150,6 +163,6 @@ class HHru:
                                          unixtime=unixtime, lunixtime=unixtime-60*60*4)
         await asyncio.sleep(0.01)
 
-    async def del_resume_active(self, title: str) -> None:
+    async def del_resume_active(self, title: str):
         await asyncio.sleep(0.01)
         return self.resume_active.pop(title, False)

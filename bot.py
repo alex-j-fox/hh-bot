@@ -7,6 +7,7 @@ from services import on_startup, on_shutdown, load_tokens_auth, Config
 from services.connecting import dp
 from services.check_proxy import is_valid
 from services.status_code import status
+from background import keep_alive 
 
 
 load_tokens_auth()
@@ -28,6 +29,7 @@ if __name__ == '__main__':
     if key:
         proxy = Config.proxy
         if is_valid(proxy) or proxy == 'None':
+            keep_alive()
             executor.start_polling(dp, skip_updates=True, on_startup=on_startup, on_shutdown=on_shutdown)
         else:
             print(status(0))
